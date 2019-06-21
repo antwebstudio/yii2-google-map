@@ -1,0 +1,16 @@
+{
+    "name": "antweb/yii2-google-map",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Hui Yang",
+            "email": "chy1988@antwebstudio.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+			"ant\\" : "src"
+		}
+    }
+}
