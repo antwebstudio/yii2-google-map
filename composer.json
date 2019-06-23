@@ -7,7 +7,14 @@
             "email": "chy1988@antwebstudio.com"
         }
     ],
-    "require": {},
+    "require": {
+	},
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
     "autoload": {
         "psr-4": {
 			"ant\\" : "src"
