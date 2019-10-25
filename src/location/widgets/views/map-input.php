@@ -59,7 +59,7 @@ $enableCustomStateCountryIso = true;
 	<div v-show="isMapShow" ref="map" style="width: 100%; height: 500px;"></div>
 </div>
 
-<?php \common\widgets\JsBlock::begin() ?>
+<?php \ant\widgets\JsBlock::begin() ?>
 <script>
 var elementId = '#<?= $this->context->id ?>';
 var app = new Vue({
@@ -336,4 +336,4 @@ var app = new Vue({
 	}
 })
 </script>
-<?php \common\widgets\JsBlock::end() ?>
+<?php \ant\widgets\JsBlock::end() ?>
