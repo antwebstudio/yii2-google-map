@@ -2,6 +2,7 @@
 use yii\helpers\ArrayHelper;
 
 $enableCustomStateCountryIso = true;
+$singleAttr = $this->context->singleAttributeMode;
 ?>
 <div id="<?= $this->context->id ?>">
 	<div style="margin-bottom: 10px;">
@@ -11,47 +12,55 @@ $enableCustomStateCountryIso = true;
 	<input v-show="isAutoCompleteShow" class="form-control" ref="autocompleteInput" type="text" />
 	
 	<div v-show="isFormShow" ref="addressForm">
-		<?= $form->field($model, 'venue')->textInput(['v-model' => 'venueName']) ?>
+		<?= $this->context->isShow('venue') ? $form->field($model, $singleAttr ? $attribute.'[venue]' : 'venue', ['options' => ['class' => 'form-group', 'v-show' => 'isFieldShow.venueName']])->label($model->getAttributeLabel($singleAttr ? $attribute.'[venue]' : 'venue'))->textInput(['v-model' => 'venueName']) : '' ?>
 		
-		<?= $form->field($model, 'address_1')->textInput(['v-model' => 'address.address1']) ?>
+		<?= $this->context->isShow('address_1') ? $form->field($model, $singleAttr ? $attribute.'[address_1]' : 'address_1', ['options' => ['class' => 'form-group', 'v-show' => 'isFieldShow.address_1']])->label($model->getAttributeLabel($singleAttr ? $attribute.'[address_1]' : 'address_1'))->textInput(['v-model' => 'address.address1']) : '' ?>
 
-		<?= $form->field($model, 'address_2')->textInput(['v-model' => 'address.address2']) ?>
+		<?= $this->context->isShow('address_2') ? $form->field($model, $singleAttr ? $attribute.'[address_2]' : 'address_2', ['options' => ['class' => 'form-group', 'v-show' => 'isFieldShow.address_2']])->label($model->getAttributeLabel($singleAttr ? $attribute.'[address_2]' : 'address_2'))->textInput(['v-model' => 'address.address2']) : '' ?>
 		
 		<div class="row">
 			<div class="col-md-6">
-				<?= $form->field($model, 'city')->textInput(['v-model' => 'address.city']) ?>
+				<?= $this->context->isShow('city') ? $form->field($model, $singleAttr ? $attribute.'[city]' : 'city', ['options' => ['class' => 'form-group', 'v-show' => 'isFieldShow.city']])->label($model->getAttributeLabel($singleAttr ? $attribute.'[city]' : 'city'))->textInput(['v-model' => 'address.city']) : '' ?>
 			</div>
 			<div class="col-md-6">
-				<?= $form->field($model, 'postcode')->textInput(['v-model' => 'address.postal_code']) ?>
+				<?= $this->context->isShow('postcode') ? $form->field($model, $singleAttr ? $attribute.'[postcode]' : 'postcode', ['options' => ['class' => 'form-group', 'v-show' => 'isFieldShow.postcode']])->label($model->getAttributeLabel($singleAttr ? $attribute.'[postcode]' : 'postcode'))->textInput(['v-model' => 'address.postal_code']) : '' ?>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-md-6">
-				<?= $form->field($model, 'countryIso2')->dropdownList(
+			
+				<?php 
+					$selected = isset($model->country)? $model->country->iso_code_2 : '';
+					if (count($this->context->countryList) == 1) {
+						$countries = ArrayHelper::map($this->context->countryList, 'iso_code_2', 'name'); 
+						$selected = key($countries);
+					}
+				?>
+				<?= $this->context->isShow('countryIso2') ? $form->field($model, $singleAttr ? $attribute.'[countryIso2]' : 'countryIso2', ['options' => ['class' => 'form-group', 'v-show' => 'isFieldShow.countryIso2']])->label($model->getAttributeLabel($singleAttr ? $attribute.'[countryIso2]' : 'countryIso2'))->dropdownList(
 					ArrayHelper::map($this->context->countryList, 'iso_code_2', 'name'), 
 					[
 						'options' => [
-							isset($model->country)? $model->country->iso_code_2 : '' => 
+							$selected => 
 							['Selected' => true ],
 						],
 						'prompt' => 'Select ...',
 						'v-model' => 'address.country',
-					]) 
+					])  : '' 
 				?>
 			</div>
 
 			<div class="col-md-6">
-				<?= $form->field($model, 'custom_state')->textInput(['v-model' => 'address.state']) ?>
+				<?= $this->context->isShow('custom_state') ? $form->field($model, $singleAttr ? $attribute.'[custom_state]' : 'custom_state', ['options' => ['class' => 'form-group', 'v-show' => 'isFieldShow.custom_state']])->label($model->getAttributeLabel($singleAttr ? $attribute.'[custom_state]' : 'custom_state'))->textInput(['v-model' => 'address.state']) : '' ?>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-md-6">
-				<?= $form->field($model, 'latitude')->textInput(['ref' => 'latitude', 'v-model' => 'coordinate.latitude']) ?>
+				<?= $this->context->isShow('latitude') ? $form->field($model, $singleAttr ? $attribute.'[latitude]' : 'latitude', ['options' => ['class' => 'form-group', 'v-show' => 'isFieldShow.latitude']])->label($model->getAttributeLabel($singleAttr ? $attribute.'[latitude]' : 'latitude'))->textInput(['ref' => 'latitude', 'v-model' => 'coordinate.latitude']) : '' ?>
 			</div>
 			<div class="col-md-6">
-				<?= $form->field($model, 'longitude')->textInput(['ref' => 'longitude', 'v-model' => 'coordinate.longitude']) ?>
+				<?= $this->context->isShow('longitude') ? $form->field($model, $singleAttr ? $attribute.'[longitude]' : 'longitude', ['options' => ['class' => 'form-group', 'v-show' => 'isFieldShow.longitude']])->label($model->getAttributeLabel($singleAttr ? $attribute.'[longitude]' : 'longitude'))->textInput(['ref' => 'longitude', 'v-model' => 'coordinate.longitude']) : '' ?>
 			</div>
 		</div>
 	</div>
@@ -66,7 +75,6 @@ var app = new Vue({
 	el: elementId,
 	data() {
 		var $el = document.querySelector(elementId);
-		
 		return {
 			map: null,
 			marker: null,
@@ -75,6 +83,7 @@ var app = new Vue({
 			isMapShow: false,
 			isAutoCompleteShow: true,
 			isFormShow: false,
+			isFieldShow: <?= json_encode($this->context->getFieldsVisibility()) ?>,
 			place: {},
 			address: {
 				address1: $el.querySelector('[v-model="address.address1"]').value,
@@ -93,6 +102,8 @@ var app = new Vue({
 		};
 	},
 	methods: {
+		init() {
+		},
 		initValueFromHtmlInline() {
 	
 			this.venueName = this.$el.querySelector('[v-model="venueName"]').value;
@@ -156,6 +167,7 @@ var app = new Vue({
 			var latlng = new google.maps.LatLng(latitude, longitude);
 			this.setMarker(latlng);
 			this.map.setCenter(latlng);
+			this.onMarkerMoved(latlng);
 		},
 		setMarker(latLng) {
 			var self = this;
@@ -241,6 +253,7 @@ var app = new Vue({
 		//this.initValueFromHtmlInline();
 	},
 	mounted() {
+		this.init();
 		
 		var mapOptions = {
 			center: new google.maps.LatLng(this.$refs.latitude.value, this.$refs.longitude.value),
